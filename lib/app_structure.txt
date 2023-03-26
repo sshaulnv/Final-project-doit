@@ -1,0 +1,54 @@
+lib/
+  |- main.dart
+  |- app/
+  |  |- routes.dart
+  |  |- theme.dart
+  |  |- utils.dart
+  |  |- services/
+  |     |- firebase_auth_service.dart
+  |     |- firebase_database_service.dart
+  |     |- firebase_storage_service.dart - maybe
+  |- modules/
+  |  |- auth/
+  |  |  |- login/
+  |  |  |  |- login_controller.dart
+  |  |  |  |- login_view.dart
+  |  |  |- signup/
+  |  |     |- signup_controller.dart
+  |  |     |- signup_view.dart
+  |  |- home/
+  |  |  |- home_controller.dart
+  |  |  |- home_view.dart
+  |  |- history/
+  |  |  |- history_controller.dart
+  |  |  |- history_view.dart
+  |  |- add_service/
+  |  |  |- add_service_controller.dart
+  |  |  |- add_service_view.dart
+  |  |- profile/
+  |  |  |- profile_controller.dart
+  |  |  |- profile_view.dart
+  |  |- search_service/
+  |  |  |- map/
+  |  |  |  |- map_controller.dart
+  |  |  |  |- map_view.dart
+  |  |  |- recommendations/
+  |  |  |  |- recommendations_controller.dart
+  |  |  |  |- recommendations_view.dart
+  |  |- chat/
+  |  |  |- chat_controller.dart
+  |  |  |- chat_view.dart
+  |- shared/
+     |- widgets/
+        |- 
+        |- 
+        |- ...
+     |- models/
+        |- user.dart
+        |- service.dart
+     |- controllers/
+        |- app_controller.dart
+        |- ...
+     |- repositories/
+        |- user_repository.dart
+        |- service_repository.dart
