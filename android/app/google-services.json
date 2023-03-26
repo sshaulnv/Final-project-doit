@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "356322095608",
+    "project_id": "doit-a35c4",
+    "storage_bucket": "doit-a35c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356322095608:android:3de5fa6473c0c2550fe60d",
+        "android_client_info": {
+          "package_name": "com.example.doit_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356322095608-pv1duul50cuhredse2anr5e3q79ls2rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbT-dns0cKKlYjCBFD6lT4zlJIPx8OvE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356322095608-pv1duul50cuhredse2anr5e3q79ls2rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

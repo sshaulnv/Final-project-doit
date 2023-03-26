@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:doit_app/round_icon_button.dart';
+import 'package:doit_app/shared/widgets/round_icon_button.dart';
 
 import '../../shared/constants/constants.dart';
 

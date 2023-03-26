@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:doit_app/login_screen.dart';
-import 'package:doit_app/profile_screen.dart';
-import 'package:doit_app/signup_screen.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-import 'history_screen.dart';
-import 'home_screen.dart';
-import 'new_service_screen.dart';
+import 'app/routes.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      home: AddServiceScreen(),
+    GetMaterialApp(
+      initialRoute: Routes.addNewServiceScreen,
+      getPages: getPages,
     ),
   );
 }

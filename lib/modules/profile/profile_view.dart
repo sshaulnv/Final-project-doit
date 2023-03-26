@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:doit_app/round_icon_button.dart';
+import 'package:doit_app/shared/widgets/round_icon_button.dart';
 
 import '../../shared/constants/constants.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             CircleAvatar(
               radius: 75,
-              backgroundImage: AssetImage('images/user_avatar.png'),
+              backgroundImage: AssetImage('assets/images/user_avatar.png'),
             ),
             SizedBox(height: 20),
             Text(

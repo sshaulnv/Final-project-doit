@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:doit_app/round_icon_button.dart';
+import 'package:doit_app/shared/widgets/round_icon_button.dart';
 
 import '../../../shared/constants/constants.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
             RoundIconButton(
               color: Colors.white,
               icon: const ImageIcon(
-                AssetImage('images/google_icon.png'),
+                AssetImage('assets/images/google_icon.png'),
                 size: 24,
                 color: Color(0xFF1976D2),
               ),

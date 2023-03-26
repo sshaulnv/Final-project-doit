@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:doit_app/round_icon_button.dart';
+import 'package:doit_app/shared/widgets/round_icon_button.dart';
 
 import '../../../shared/constants/constants.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupScreenState extends State<SignupScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
