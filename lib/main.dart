@@ -6,7 +6,7 @@ import 'app/routes.dart';
 void main() {
   runApp(
     GetMaterialApp(
-      initialRoute: Routes.addNewServiceScreen,
+      initialRoute: Routes.homeScreen,
       getPages: getPages,
     ),
   );
