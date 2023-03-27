@@ -16,7 +16,7 @@ void main() {
   // InitialBindings().dependencies();
   runApp(
     GetMaterialApp(
-      initialRoute: Routes.signupScreen,
+      initialRoute: Routes.loginScreen,
       getPages: getPages,
     ),
   );
