@@ -1,5 +1,8 @@
+import 'package:doit_app/modules/auth/signup/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../shared/constants/constants.dart';
 
@@ -88,7 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(SignupScreen());
+              },
               child: Text(
                 'Signup',
                 style: TextStyle(color: Colors.blue[300]),
