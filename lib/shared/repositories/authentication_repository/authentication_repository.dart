@@ -4,6 +4,8 @@ import 'package:doit_app/shared/repositories/authentication_repository/exception
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../../app/utils.dart';
+
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
 
@@ -35,6 +37,7 @@ class AuthenticationRepository extends GetxController {
     } on FirebaseAuthException catch (e) {
       final ex = SignupWithEmailAndPasswordFailure.code(e.code);
       print('FIREBASE AUTH EXCEPTION - ${ex.message}');
+      errorSnackbar('Signup Error!', ex.message);
     } catch (_) {
       const ex = SignupWithEmailAndPasswordFailure();
       print('EXCEPTION - ${ex.message}');

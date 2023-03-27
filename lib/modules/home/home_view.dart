@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/constants/constants.dart';
 
+import '../../shared/repositories/authentication_repository/authentication_repository.dart';
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,22 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RoundIconButton(
+                    color: Colors.redAccent,
+                    icon: Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                    text: Text(''),
+                    onPressed: () {
+                      AuthenticationRepository.instance.logout();
+                    },
+                  ),
+                ],
+              ),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

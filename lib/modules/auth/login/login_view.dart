@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Get.to(SignupScreen());
+                Get.to(SignupScreen(), transition: Transition.native);
               },
               child: Text(
                 'Signup',
