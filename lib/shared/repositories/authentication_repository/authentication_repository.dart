@@ -1,10 +1,15 @@
 import 'package:doit_app/modules/auth/login/login_view.dart';
 import 'package:doit_app/modules/home/home_view.dart';
+import 'package:doit_app/shared/repositories/authentication_repository/exceptions/login_email_password_failure.dart';
 import 'package:doit_app/shared/repositories/authentication_repository/exceptions/signup_email_password_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../app/utils.dart';
+import '../../controllers/user_controller.dart';
+import '../../models/user_model.dart';
+
+import '../user_repository.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -19,11 +24,22 @@ class AuthenticationRepository extends GetxController {
     ever(firebaseUser, _setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
-    print(user?.email);
-    user == null
-        ? Get.offAll(() => LoginScreen())
-        : Get.offAll(() => HomeScreen());
+  _setInitialScreen(User? user) async {
+    if (user == null) {
+      Get.offAll(() => LoginScreen());
+    } else {
+      if (UserController.instance.user.value.email.isEmpty) {
+        dynamic userData =
+            await UserRepository.instace.getUserDetails(user.email!);
+
+        UserController.instance.user = UserModel(
+                username: userData.username,
+                email: userData.email,
+                password: userData.password)
+            .obs;
+      }
+      Get.offAll(() => HomeScreen());
+    }
   }
 
   Future<void> createUserWithEmailAndPassword(
@@ -46,10 +62,15 @@ class AuthenticationRepository extends GetxController {
 
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-    } catch (_) {}
+      final ex = LoginWithEmailAndPasswordFailure.code(e.code);
+      print('FIREBASE AUTH EXCEPTION - ${ex.message}');
+      errorSnackbar('Login Error!', ex.message);
+    } catch (_) {
+      const ex = LoginWithEmailAndPasswordFailure();
+      print('EXCEPTION - ${ex.message}');
+    }
   }
 
   Future<void> logout() async => await _auth.signOut();

@@ -39,6 +39,10 @@ dependencies:
   get: ^4.6.5
   firebase_auth: ^4.3.0
   cloud_firestore: ^4.4.5
+  firebase_storage: ^11.0.16
+  file_picker: ^5.2.6
+  file_picker_plus: ^1.6.0
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

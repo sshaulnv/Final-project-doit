@@ -1,3 +1,4 @@
+import 'package:doit_app/modules/auth/login/login_controller.dart';
 import 'package:doit_app/modules/auth/signup/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
@@ -12,11 +13,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
     return Scaffold(
       backgroundColor: Color(0x88171717),
       body: Container(
@@ -24,13 +23,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Welcome!',
               style: kTextStyleWhiteHeader,
             ),
             SizedBox(height: 40),
             TextField(
-              controller: emailController,
+              controller: LoginController.instance.emailController,
               keyboardType: TextInputType.emailAddress,
               style: kTextStyleTextFiled,
               decoration: kTextFieldInputDecoration.copyWith(
@@ -43,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
             TextField(
-              controller: passwordController,
+              controller: LoginController.instance.passwordController,
               obscureText: true,
               style: kTextStyleTextFiled,
               decoration: kTextFieldInputDecoration.copyWith(
@@ -57,11 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 30),
             RoundIconButton(
               color: kColorRoundButton,
-              icon: Icon(
+              icon: const Icon(
                 Icons.login,
                 color: Colors.white,
               ),
-              text: Text(
+              text: const Text(
                 'Login',
                 style: TextStyle(
                   color: Colors.white,
@@ -69,7 +68,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 20,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                final email =
+                    LoginController.instance.emailController.text.trim();
+                final password =
+                    LoginController.instance.passwordController.text.trim();
+                LoginController.instance.loginUser(email, password);
+              },
             ),
             SizedBox(height: 20),
             RoundIconButton(
@@ -79,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 size: 24,
                 color: Color(0xFF1976D2),
               ),
-              text: Text(
+              text: const Text(
                 'Google',
                 style: TextStyle(
                   color: Color(0xFF1976D2),

@@ -9,14 +9,14 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'app/bindings/initial_bindings.dart';
 import 'app/routes.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(AuthenticationRepository(), permanent: true));
-  // InitialBindings().dependencies();
   runApp(
     GetMaterialApp(
       initialRoute: Routes.loginScreen,
+      initialBinding: InitialBindings(),
       getPages: getPages,
     ),
   );

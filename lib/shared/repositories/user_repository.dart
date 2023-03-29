@@ -7,6 +7,7 @@ import '../models/user_model.dart';
 class UserRepository extends GetxController {
   static UserRepository get instace => Get.find();
   final _db = FirebaseFirestore.instance;
+  // late final Rx<UserModel?> user;
 
   Future<void> createUser(UserModel user) async {
     await _db
@@ -17,5 +18,12 @@ class UserRepository extends GetxController {
         .catchError((error) {
       errorSnackbar('Error', 'Something went wrong.');
     });
+  }
+
+  Future<UserModel> getUserDetails(String email) async {
+    final snapshot =
+        await _db.collection("Users").where("email", isEqualTo: email).get();
+    final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
+    return userData;
   }
 }

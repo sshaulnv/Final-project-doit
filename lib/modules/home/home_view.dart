@@ -1,7 +1,9 @@
+import 'package:doit_app/modules/profile/profile_view.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/constants/constants.dart';
+import 'package:get/get.dart';
 
 import '../../shared/repositories/authentication_repository/authentication_repository.dart';
 
@@ -16,33 +18,37 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RoundIconButton(
-                    color: Colors.redAccent,
-                    icon: Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                    ),
-                    text: Text(''),
-                    onPressed: () {
-                      AuthenticationRepository.instance.logout();
-                    },
+              RoundIconButton(
+                color: kColorRoundButton,
+                icon: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                text: const Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
-                ],
+                ),
+                onPressed: () {
+                  Get.to(() => ProfileScreen());
+                },
               ),
-              SizedBox(height: 20),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RoundIconButton(
                     color: Colors.white,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.home,
                       color: kColorBlueText,
                     ),
-                    text: Text(
+                    text: const Text(
                       'Home',
                       style: TextStyle(
                         color: kColorBlueText,
