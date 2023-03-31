@@ -5,6 +5,7 @@ import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../app/services/location_service.dart';
 import '../../../shared/constants/constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Get.to(SignupScreen(), transition: Transition.native);
               },
               child: Text(

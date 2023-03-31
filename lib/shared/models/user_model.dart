@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String? id;
-  final String username;
-  final String email;
-  final String password;
+  String? id;
+  String username;
+  String email;
+  String password;
+  List<String> provideServices;
+  List<String> consumeServices;
 
-  const UserModel({
+  UserModel({
     this.id,
     required this.username,
     required this.email,
     required this.password,
+    this.provideServices = const [],
+    this.consumeServices = const [],
   });
 
   Map<String, dynamic> toJson() {
@@ -18,6 +22,8 @@ class UserModel {
       "username": username,
       "email": email,
       "password": password,
+      "provideServices": provideServices,
+      "consumeServices": consumeServices,
     };
   }
 
@@ -29,6 +35,8 @@ class UserModel {
       username: data["username"],
       email: data["email"],
       password: data["password"],
+      provideServices: data["provideServices"],
+      consumeServices: data["consumeServices"],
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:doit_app/app/services/location_service.dart';
 import 'package:doit_app/shared/repositories/storage_repository/storage_repository.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ class InitialBindings implements Bindings {
     Rx<UserModel> userModel =
         UserModel(username: '', email: '', password: '').obs;
     Get.put(UserController(user: userModel), permanent: true);
+    Get.put(LocationService(), permanent: true);
     Get.put(StorageRepository(), permanent: true);
     Get.put(UserRepository(), permanent: true);
   }

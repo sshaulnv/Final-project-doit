@@ -1,0 +1,65 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../constants/categories.dart';
+import '../constants/service_status.dart';
+
+class ServiceModel {
+  final String? id;
+  final String provider; // email
+  final String? consumer; // email
+  final String title;
+  final Category category;
+  final DateTime date;
+  final GeoPoint sourceAddress;
+  final GeoPoint destAddress;
+  final String description;
+  final int price;
+  final ServiceStatus status;
+
+  const ServiceModel({
+    this.id,
+    required this.provider,
+    this.consumer,
+    required this.title,
+    required this.category,
+    required this.date,
+    required this.sourceAddress,
+    required this.destAddress,
+    required this.description,
+    required this.price,
+    required this.status,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "provider": provider,
+      "consumer": consumer,
+      "title": title,
+      "category": category.toString().split('.')[1],
+      "date": Timestamp.fromDate(date),
+      "sourceAddress": sourceAddress,
+      "destAddress": destAddress,
+      "description": description,
+      "price": price,
+      "status": status,
+    };
+  }
+
+  factory ServiceModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+    return ServiceModel(
+      id: document.id,
+      provider: data["provider"],
+      consumer: data["consumer"],
+      title: data["title"],
+      category: convertStringToCategory(data["category"]),
+      date: data["date"].toDate(),
+      sourceAddress: data["sourceAddress"],
+      destAddress: data["destAddress"],
+      description: data["description"],
+      price: data["price"],
+      status: convertStringToServiceStatus(data["status"]),
+    );
+  }
+}
