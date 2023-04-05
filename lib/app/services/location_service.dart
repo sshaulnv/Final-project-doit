@@ -2,11 +2,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class LocationService extends GetxController {
   static LocationService get instance => Get.find();
+  final String key = 'AIzaSyBUPNbhU0hQTP45jhSAAHK2UPmN-DV2MUI';
 
-  Future<GeoPoint> getCurrentPosition() async {
+  Future<String> getPlaceId(String input) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&key=$key';
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+    print(json);
+    if (json['status'] != 'ZERO_RESULTS') {
+      var placeld = json['candidates'][0]['place_id'] as String;
+      print(placeld);
+      return placeld;
+    }
+    return '';
+  }
+
+  Future<Map<String, dynamic>?> getPlace(String input) async {
+    final placeId = await getPlaceId(input);
+    if (placeId == '') {
+      return null;
+    }
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$key';
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+    var results = json['result'] as Map<String, dynamic>;
+    print(placeToAddressString(results));
+    return results;
+  }
+
+  String placeToAddressString(Map<String, dynamic> place) {
+    final String city = place['address_components'][2]['short_name'];
+    final String street = place['address_components'][1]['short_name'];
+    final String streetNumber = place['address_components'][0]['short_name'];
+    return '$city, $street, $streetNumber';
+  }
+
+  Future<void> getLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -39,9 +77,9 @@ class LocationService extends GetxController {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+  }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
+  Future<GeoPoint> getCurrentPosition() async {
     final Position position = await Geolocator.getCurrentPosition();
     return GeoPoint(position.latitude, position.longitude);
   }

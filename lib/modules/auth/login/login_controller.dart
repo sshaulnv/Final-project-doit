@@ -8,19 +8,19 @@ import '../../../shared/repositories/user_repository.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
-  // final userRepository = Get.put(() => UserRepository());
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   Future<void> loginUser(String email, String password) async {
-    AuthenticationRepository.instance
-        .loginWithEmailAndPassword(email, password);
-    dynamic userData = (await UserRepository.instace.getUserDetails(email));
-    UserController.instance.user = UserModel(
-            username: userData.username,
-            email: userData.email,
-            password: userData.password)
-        .obs;
-    print(UserController.instance.user.value.username);
+    if (await AuthenticationRepository.instance
+        .loginWithEmailAndPassword(email, password)) {
+      dynamic userData = (await UserRepository.instace.getUserDetails(email));
+      UserController.instance.user = UserModel(
+              username: userData.username,
+              email: userData.email,
+              password: userData.password)
+          .obs;
+    }
   }
 }

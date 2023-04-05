@@ -5,10 +5,10 @@ import '../constants/service_status.dart';
 
 class ServiceModel {
   final String? id;
-  final String provider; // email
-  final String? consumer; // email
+  final String? provider; // email
+  final String consumer; // email
   final String title;
-  final Category category;
+  final Categories category;
   final DateTime date;
   final GeoPoint sourceAddress;
   final GeoPoint destAddress;
@@ -18,8 +18,8 @@ class ServiceModel {
 
   const ServiceModel({
     this.id,
-    required this.provider,
-    this.consumer,
+    this.provider,
+    required this.consumer,
     required this.title,
     required this.category,
     required this.date,
@@ -41,7 +41,7 @@ class ServiceModel {
       "destAddress": destAddress,
       "description": description,
       "price": price,
-      "status": status,
+      "status": status.toString().split('.')[1],
     };
   }
 

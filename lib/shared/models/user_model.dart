@@ -5,8 +5,8 @@ class UserModel {
   String username;
   String email;
   String password;
-  List<String> provideServices;
-  List<String> consumeServices;
+  List<dynamic> provideServices;
+  List<dynamic> consumeServices;
 
   UserModel({
     this.id,

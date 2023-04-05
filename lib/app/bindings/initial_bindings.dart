@@ -1,4 +1,5 @@
 import 'package:doit_app/app/services/location_service.dart';
+import 'package:doit_app/shared/repositories/service_repository.dart';
 import 'package:doit_app/shared/repositories/storage_repository/storage_repository.dart';
 import 'package:get/get.dart';
 
@@ -17,5 +18,6 @@ class InitialBindings implements Bindings {
     Get.put(LocationService(), permanent: true);
     Get.put(StorageRepository(), permanent: true);
     Get.put(UserRepository(), permanent: true);
+    Get.put(ServiceRepository(), permanent: true);
   }
 }

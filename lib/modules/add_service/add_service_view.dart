@@ -1,7 +1,17 @@
+import 'package:doit_app/app/services/location_service.dart';
+import 'package:doit_app/modules/add_service/search_address_view.dart';
+import 'package:doit_app/shared/constants/categories.dart';
+import 'package:doit_app/shared/constants/service_status.dart';
+import 'package:doit_app/shared/models/service_model.dart';
+import 'package:doit_app/shared/repositories/service_repository.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
-
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../app/utils.dart';
 import '../../shared/constants/constants.dart';
+import 'add_service_controller.dart';
 
 class AddServiceScreen extends StatefulWidget {
   @override
@@ -9,15 +19,15 @@ class AddServiceScreen extends StatefulWidget {
 }
 
 class _AddServiceScreenState extends State<AddServiceScreen> {
-  String? _title;
-  String? _category;
-  DateTime? _date;
-  String? _sourceAddress;
-  String? _destinationAddress;
-  String? _description;
-  double? _price;
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controller = Get.put(AddServiceController());
+  @override
+  void initState() {
+    super.initState();
+    var tempPosition = LocationService.instance.getCurrentPosition();
+    tempPosition.then((resp) {
+      controller.currentPosition = LatLng(resp.latitude, resp.longitude);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +37,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -56,7 +66,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     return null;
                   },
                   onSaved: (String? value) {
-                    _description = value!;
+                    controller.title = value!;
                   },
                 ),
                 SizedBox(height: 16.0),
@@ -69,13 +79,9 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     labelText: 'Service Category',
                     labelStyle: kTextStyleTextFiled,
                   ),
-                  value: _category,
-                  items: <String>[
-                    'Category 1',
-                    'Category 2',
-                    'Category 3',
-                    'Category 4',
-                  ].map((String value) {
+                  value: controller.category,
+                  items: EnumToString.toList(Categories.values, camelCase: true)
+                      .map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
@@ -91,19 +97,14 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     return null;
                   },
                   onChanged: (String? value) {
-                    setState(() {
-                      _category = value!;
-                    });
+                    controller.category = value!;
                   },
                   onSaved: (String? value) {
-                    _category = value!;
+                    controller.category = value!;
                   },
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  child: Text(_date == null
-                      ? 'Select Date'
-                      : 'Date: ${_date.toString().substring(0, 10)}'),
                   onPressed: () async {
                     final DateTime? picked = await showDatePicker(
                       context: context,
@@ -113,7 +114,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     );
                     if (picked != null) {
                       setState(() {
-                        _date = picked;
+                        controller.date = picked;
                       });
                     }
                   },
@@ -124,48 +125,59 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  style: kTextStyleTextFiled,
-                  decoration: kTextFieldInputDecoration.copyWith(
-                    prefixIcon: const Icon(
-                      Icons.location_on,
-                      color: kColorBlueText,
+                  child: Text(
+                    controller.date == null
+                        ? 'Select Date'
+                        : 'Date: ${controller.date.toString().substring(0, 10)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
-                    labelText: 'Source Address',
                   ),
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a source address for your service request';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? value) {
-                    _sourceAddress = value!;
-                  },
                 ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  style: kTextStyleTextFiled,
-                  decoration: kTextFieldInputDecoration.copyWith(
-                    prefixIcon: const Icon(
+                const SizedBox(height: 16.0),
+                Obx(
+                  () => RoundIconButton(
+                    color: kColorRoundButton,
+                    icon: const Icon(
                       Icons.location_on,
-                      color: kColorBlueText,
+                      color: Colors.white,
                     ),
-                    labelText: 'Destination Address',
+                    text: Text(
+                      controller.sourceAddressDescription.value,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.to(SearchAddress(
+                        isSourceAddress: true,
+                      ));
+                    },
                   ),
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a destination address for your service request';
-                    }
-                    return null;
-                  },
-                  onSaved: (String? value) {
-                    _destinationAddress = value;
-                  },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
+                Obx(
+                  () => RoundIconButton(
+                    color: kColorRoundButton,
+                    icon: Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                    ),
+                    text: Text(
+                      controller.destAddressDescription.value,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.to(() => SearchAddress(isSourceAddress: false));
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   style: kTextStyleTextFiled,
                   decoration: kTextFieldInputDecoration.copyWith(
@@ -179,10 +191,10 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     return null;
                   },
                   onSaved: (String? value) {
-                    _description = value;
+                    controller.description = value;
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   style: kTextStyleTextFiled,
                   decoration: kTextFieldInputDecoration.copyWith(
@@ -197,23 +209,23 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     if (value!.isEmpty) {
                       return 'Please enter a price for your service request';
                     }
-                    if (double.tryParse(value) == null) {
+                    if (int.tryParse(value) == null) {
                       return 'Please enter a valid price';
                     }
                     return null;
                   },
                   onSaved: (String? value) {
-                    _price = double.parse(value!);
+                    controller.price = int.parse(value!);
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 RoundIconButton(
                   color: kColorRoundButton,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.verified,
                     color: Colors.white,
                   ),
-                  text: Text(
+                  text: const Text(
                     'Create Service',
                     style: TextStyle(
                       color: Colors.white,
@@ -222,9 +234,27 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     ),
                   ),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // TODO: Implement create service functionality here
+                    if (controller.formKey.currentState!.validate()) {
+                      if (controller.date == null) {
+                        errorSnackbar(
+                            'Fill all fields!', 'The Date field is empty');
+                        return;
+                      }
+                      controller.formKey.currentState!.save();
+                      controller.newService = ServiceModel(
+                          consumer: controller.consumer!,
+                          title: controller.title!,
+                          category:
+                              convertStringToCategory(controller.category),
+                          date: controller.date!,
+                          sourceAddress: controller.sourceAddress!,
+                          destAddress: controller.destAddress!,
+                          description: controller.description!,
+                          price: controller.price!,
+                          status: ServiceStatus.PENDING);
+                      ServiceRepository.instace
+                          .createService(controller.newService);
+                      print(controller.newService);
                     }
                   },
                 ),

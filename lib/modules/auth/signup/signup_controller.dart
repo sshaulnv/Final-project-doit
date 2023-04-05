@@ -8,6 +8,7 @@ import '../../../shared/models/user_model.dart';
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();
   final userRepository = Get.put(UserRepository());
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();

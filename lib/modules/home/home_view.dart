@@ -6,6 +6,8 @@ import 'package:doit_app/shared/constants/constants.dart';
 import 'package:get/get.dart';
 
 import '../../shared/repositories/authentication_repository/authentication_repository.dart';
+import '../add_service/add_service_view.dart';
+import '../add_service/search_address_view.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -39,43 +41,65 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RoundIconButton(
-                    color: Colors.white,
-                    icon: const Icon(
-                      Icons.home,
-                      color: kColorBlueText,
-                    ),
-                    text: const Text(
-                      'Home',
-                      style: TextStyle(
-                        color: kColorBlueText,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    onPressed: () {},
-                  ),
-                  SizedBox(width: 20),
-                  RoundIconButton(
-                    color: kColorRoundButton,
-                    icon: Icon(
-                      Icons.list_alt,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RoundIconButton(
                       color: Colors.white,
-                    ),
-                    text: Text(
-                      'History',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                      icon: const Icon(
+                        Icons.home,
+                        color: kColorBlueText,
                       ),
+                      text: const Text(
+                        'Home',
+                        style: TextStyle(
+                          color: kColorBlueText,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
-                  ),
-                ],
+                    SizedBox(width: 20),
+                    RoundIconButton(
+                      color: kColorRoundButton,
+                      icon: Icon(
+                        Icons.list_alt,
+                        color: Colors.white,
+                      ),
+                      text: Text(
+                        'History',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                    SizedBox(width: 20),
+                    RoundIconButton(
+                      color: kColorRoundButton,
+                      icon: Icon(
+                        Icons.work,
+                        color: Colors.white,
+                      ),
+                      text: Text(
+                        'New Service',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.to(() => AddServiceScreen());
+                      },
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 20),
               Text(

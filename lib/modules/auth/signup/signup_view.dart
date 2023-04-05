@@ -15,10 +15,9 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controller = Get.put(SignupController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignupController());
     return Scaffold(
       backgroundColor: kColorBackground,
       body: Container(
@@ -26,7 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey,
+              key: controller.formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,8 +130,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
+                      if (controller.formKey.currentState!.validate()) {
+                        controller.formKey.currentState!.save();
                         final user = UserModel(
                             username: controller.usernameController.text.trim(),
                             email: controller.emailController.text.trim(),

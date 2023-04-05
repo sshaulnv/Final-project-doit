@@ -1,6 +1,6 @@
-enum Category { ANIMALS, SHOPPING, CLEANING, MEDICAL, DELIVERIES }
+enum Categories { ANIMALS, SHOPPING, CLEANING, MEDICAL, DELIVERIES }
 
-Category convertStringToCategory(String categoryString) {
-  return Category.values
+Categories convertStringToCategory(String categoryString) {
+  return Categories.values
       .firstWhere((e) => e.toString().split('.')[1] == categoryString);
 }
