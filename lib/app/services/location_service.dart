@@ -7,7 +7,7 @@ import 'dart:convert' as convert;
 
 class LocationService extends GetxController {
   static LocationService get instance => Get.find();
-  final String key = 'AIzaSyBUPNbhU0hQTP45jhSAAHK2UPmN-DV2MUI';
+  final String key = 'API KEY';
 
   Future<String> getPlaceId(String input) async {
     final String url =
