@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../shared/constants/constants.dart';
 import 'add_service_controller.dart';
 
 class SearchAddressController extends GetxController {
@@ -19,6 +20,6 @@ class SearchAddressController extends GetxController {
   );
   CameraPosition userCameraPosition = CameraPosition(
     target: AddServiceController.instance.currentPosition,
-    zoom: 17,
+    zoom: kMapCameraZoom,
   );
 }

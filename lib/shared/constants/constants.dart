@@ -57,3 +57,5 @@ const kTextStyleTextFiled = TextStyle(
   fontFamily: 'Doppio_One',
   letterSpacing: 0.5,
 );
+
+const kMapCameraZoom = 15.0;

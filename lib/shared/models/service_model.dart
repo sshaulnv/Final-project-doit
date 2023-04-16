@@ -11,7 +11,9 @@ class ServiceModel {
   final Categories category;
   final DateTime date;
   final GeoPoint sourceAddress;
+  final String sourceAddressDescription;
   final GeoPoint destAddress;
+  final String destAddressDescription;
   final String description;
   final int price;
   final ServiceStatus status;
@@ -24,7 +26,9 @@ class ServiceModel {
     required this.category,
     required this.date,
     required this.sourceAddress,
+    required this.sourceAddressDescription,
     required this.destAddress,
+    required this.destAddressDescription,
     required this.description,
     required this.price,
     required this.status,
@@ -38,7 +42,9 @@ class ServiceModel {
       "category": category.toString().split('.')[1],
       "date": Timestamp.fromDate(date),
       "sourceAddress": sourceAddress,
+      "sourceAddressDescription": sourceAddressDescription,
       "destAddress": destAddress,
+      "destAddressDescription": destAddressDescription,
       "description": description,
       "price": price,
       "status": status.toString().split('.')[1],
@@ -56,7 +62,9 @@ class ServiceModel {
       category: convertStringToCategory(data["category"]),
       date: data["date"].toDate(),
       sourceAddress: data["sourceAddress"],
+      sourceAddressDescription: data["sourceAddressDescription"],
       destAddress: data["destAddress"],
+      destAddressDescription: data["destAddressDescription"],
       description: data["description"],
       price: data["price"],
       status: convertStringToServiceStatus(data["status"]),

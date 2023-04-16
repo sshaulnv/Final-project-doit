@@ -37,19 +37,20 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.8.0
   get: ^4.6.5
-  firebase_auth: ^4.3.0
-  cloud_firestore: ^4.4.5
+  firebase_auth: ^4.4.0
+  cloud_firestore: ^4.5.0
   firebase_storage: ^11.0.16
   file_picker: ^5.2.6
   file_picker_plus: ^1.6.0
   permission_handler: ^10.2.0
   enum_to_string: ^2.0.1
   flutter_map: ^3.1.0
-  location: ^4.4.0
   google_maps_flutter: ^2.2.5
-  google_maps_webservice: ^0.0.19
+  category_picker: ^1.0.1
   geocoding: ^2.1.0
-  geolocator: ^9.0.2
+#  geolocator: ^9.0.2
+  location: ^4.3.0
+
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/images/maps/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -96,6 +98,9 @@ flutter:
     - family: Doppio_One
       fonts:
         - asset: assets/fonts/DoppioOne-Regular.ttf
+    - family: RobotoSlab
+      fonts:
+        - asset: assets/fonts/RobotoSlab-VariableFont_wght.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

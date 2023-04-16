@@ -1,15 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doit_app/modules/history/history_view.dart';
+import 'package:doit_app/modules/home/home_controller.dart';
 import 'package:doit_app/modules/profile/profile_view.dart';
+import 'package:doit_app/shared/constants/categories.dart';
+import 'package:doit_app/shared/repositories/service_repository.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/constants/constants.dart';
 import 'package:get/get.dart';
-
-import '../../shared/repositories/authentication_repository/authentication_repository.dart';
+import '../../shared/constants/service_status.dart';
+import '../../shared/models/service_model.dart';
+import '../../shared/widgets/service_dialog.dart';
 import '../add_service/add_service_view.dart';
-import '../add_service/search_address_view.dart';
+import '../search_service/map/map_view.dart';
 
 class HomeScreen extends StatelessWidget {
+  final controller = Get.put(HomeController());
+
+  HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,11 +74,11 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(width: 20),
                     RoundIconButton(
                       color: kColorRoundButton,
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.list_alt,
                         color: Colors.white,
                       ),
-                      text: Text(
+                      text: const Text(
                         'History',
                         style: TextStyle(
                           color: Colors.white,
@@ -77,16 +86,18 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => HistoryScreen());
+                      },
                     ),
                     SizedBox(width: 20),
                     RoundIconButton(
                       color: kColorRoundButton,
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.work,
                         color: Colors.white,
                       ),
-                      text: Text(
+                      text: const Text(
                         'New Service',
                         style: TextStyle(
                           color: Colors.white,
@@ -98,135 +109,160 @@ class HomeScreen extends StatelessWidget {
                         Get.to(() => AddServiceScreen());
                       },
                     ),
+                    const SizedBox(width: 20),
+                    RoundIconButton(
+                      color: kColorRoundButton,
+                      icon: const Icon(
+                        Icons.map_outlined,
+                        color: Colors.white,
+                      ),
+                      text: const Text(
+                        'Search Map',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.to(() => SearchMap());
+                      },
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 20),
               Text(
-                'Service Details:',
+                'Services You Provide:',
                 style: kTextStyleWhiteHeader.copyWith(
                     fontSize: 25,
                     letterSpacing: 1,
                     fontWeight: FontWeight.w900),
               ),
               SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 10, // replace with your data length
-                  itemBuilder: (BuildContext context, int index) {
-                    // replace with your card widget implementation
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 4,
-                      child: ListTile(
-                        title: Text('Service ${index + 1}'),
-                        subtitle: Text('Service details goes here...'),
-                        trailing: Icon(Icons.arrow_forward),
-                        onTap: () {},
-                      ),
-                    );
-                  },
-                ),
+              StreamBuilder<QuerySnapshot>(
+                stream: ServiceRepository.instance.provideServiceStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading...');
+                  }
+                  var provideServiceDocs = snapshot.data!.docs;
+                  var provideServiceList = [];
+                  for (var doc in provideServiceDocs) {
+                    provideServiceList.add(ServiceModel.fromSnapshot(
+                        doc as DocumentSnapshot<Map<String, dynamic>>));
+                  }
+                  provideServiceList = provideServiceList
+                      .where((service) =>
+                          service.status != ServiceStatus.COMPLETED)
+                      .toList();
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: provideServiceList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ServiceModel service = provideServiceList[index];
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                          child: ListTile(
+                            title: Text(service.title),
+                            subtitle: Text(service.description),
+                            leading: Icon(
+                              categoriesIcon[service.category],
+                              size: 30,
+                            ),
+                            trailing: Icon(Icons.arrow_forward),
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ServiceDialog(
+                                    service: service,
+                                    isConsumer: false,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 20),
               Text(
-                'Categories:',
+                'Services You Consume:',
                 style: kTextStyleWhiteHeader.copyWith(
                     fontSize: 25,
                     letterSpacing: 1,
                     fontWeight: FontWeight.w900),
               ),
               SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    children: [
-                      // replace with your category card widget implementation
-                      CategoryCard(
-                        icon: Icon(
-                          Icons.abc,
-                          size: 40,
-                        ),
-                        title: 'Category 1',
-                        servicesCount: 5,
-                        onTap: () {},
-                      ),
-                      CategoryCard(
-                        icon: Icon(
-                          Icons.live_tv,
-                          size: 40,
-                        ),
-                        title: 'Category 2',
-                        servicesCount: 10,
-                        onTap: () {},
-                      ),
-                      CategoryCard(
-                        icon: Icon(Icons.person, size: 40),
-                        title: 'Category 3',
-                        servicesCount: 2,
-                        onTap: () {},
-                      ),
-                      CategoryCard(
-                        icon: Icon(Icons.abc),
-                        title: 'Category 4',
-                        servicesCount: 7,
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-                ),
+              StreamBuilder<QuerySnapshot>(
+                stream: ServiceRepository.instance.consumeServiceStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading...');
+                  }
+                  var consumeServiceDocs = snapshot.data!.docs;
+                  var consumeServiceList = [];
+                  for (var doc in consumeServiceDocs) {
+                    consumeServiceList.add(ServiceModel.fromSnapshot(
+                        doc as DocumentSnapshot<Map<String, dynamic>>));
+                  }
+                  consumeServiceList = consumeServiceList
+                      .where((service) =>
+                          service.status != ServiceStatus.COMPLETED)
+                      .toList();
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: consumeServiceList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ServiceModel service = consumeServiceList[index];
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                          child: ListTile(
+                            title: Text(service.title),
+                            subtitle: Text(service.description),
+                            leading: Icon(
+                              categoriesIcon[service.category],
+                              size: 30,
+                            ),
+                            trailing: Icon(Icons.arrow_forward),
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ServiceDialog(
+                                    service: service,
+                                    isConsumer: true,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final String title;
-  final int servicesCount;
-  final Icon icon;
-  final VoidCallback onTap;
-
-  const CategoryCard({
-    required this.title,
-    required this.servicesCount,
-    required this.onTap,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 4,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon,
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text('$servicesCount Services'),
             ],
           ),
         ),

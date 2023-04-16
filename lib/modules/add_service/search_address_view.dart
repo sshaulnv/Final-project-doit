@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../app/services/location_service.dart';
+import '../../shared/constants/constants.dart';
 
 class SearchAddress extends StatefulWidget {
   bool isSourceAddress;
@@ -83,7 +84,7 @@ class SearchAddressState extends State<SearchAddress> {
     googleMapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         target: LatLng(lat, lng),
-        zoom: 17,
+        zoom: kMapCameraZoom,
       ),
     ));
 
@@ -102,8 +103,6 @@ class SearchAddressState extends State<SearchAddress> {
       AddServiceController.instance.sourceAddress = addressGeoPoint;
       AddServiceController.instance.sourceAddressDescription.value =
           controller.tempDescription!;
-      print(
-          '#####${AddServiceController.instance.sourceAddressDescription.value}');
     } else {
       AddServiceController.instance.destAddress = addressGeoPoint;
       AddServiceController.instance.destAddressDescription.value =

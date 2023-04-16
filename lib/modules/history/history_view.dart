@@ -1,10 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doit_app/shared/controllers/user_controller.dart';
+import 'package:doit_app/shared/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/constants/categories.dart';
 import '../../shared/constants/constants.dart';
+import '../../shared/constants/service_status.dart';
+import '../../shared/models/service_model.dart';
+import '../../shared/repositories/service_repository.dart';
+import '../../shared/widgets/filters_dialog.dart';
+import '../../shared/widgets/round_icon_button.dart';
+import '../../shared/widgets/service_dialog.dart';
+import 'package:get/get.dart';
 
-class HistoryScreen extends StatelessWidget {
+import 'history_controller.dart';
+
+class HistoryScreen extends StatefulWidget {
+  // List serviceHistory;
+  // HistoryScreen({required this.serviceHistory});
+
+  @override
+  _HistoryScreenState createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  final HistoryController controller = Get.put(HistoryController());
+
   @override
   Widget build(BuildContext context) {
+    print(ServiceRepository.instance.consumeServiceStream);
     return Scaffold(
       backgroundColor: Color(0x88171717),
       body: SafeArea(
@@ -22,99 +46,169 @@ class HistoryScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              TextField(
-                keyboardType: TextInputType.text,
-                style: kTextStyleTextFiled,
-                decoration: kTextFieldInputDecoration.copyWith(
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    color: kColorBlueText,
-                  ),
-                  labelText: 'Search Service',
-                ),
+              SizedBox(
+                height: 20,
               ),
-              SizedBox(height: 16.0),
-              Expanded(
-                flex: 2,
-                child: Card(
-                  elevation: 4.0,
-                  color: Colors.transparent,
-                  child: Container(
-                    height: 300.0,
-                    child: ListView.builder(
-                      itemCount: 30,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 4,
-                            child: ListTile(
-                              leading: Icon(Icons.local_car_wash),
-                              title: Text('Car Wash'),
-                              subtitle: Text('March 21, 2023'),
-                              trailing: Text('\$20'),
-                              onTap: () {
-                                // handle tapping on an item
-                              },
-                            ),
-                          ),
-                        );
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RoundIconButton(
+                      color: Colors.white,
+                      icon: const Icon(
+                        Icons.filter_alt,
+                        color: kColorBlueText,
+                      ),
+                      text: const Text(
+                        'Categories',
+                        style: TextStyle(
+                          color: kColorBlueText,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CategoryFilterDialog(
+                              options: Categories.values.toList(),
+                              controller: controller,
+                            );
+                          },
+                        ).then((value) => controller.filteredServiceList());
                       },
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 100.0, vertical: 5),
-                child: Divider(
-                  height: 20,
-                  thickness: 2,
-                  color: Colors.white,
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Service Name",
+                    SizedBox(width: 20),
+                    Obx(
+                      () => RoundIconButton(
+                        color: controller.filters['Provide'].value
+                            ? Colors.white
+                            : Colors.blue,
+                        icon: Icon(
+                          Icons.filter_alt,
+                          color: controller.filters['Provide'].value
+                              ? kColorBlueText
+                              : Colors.white,
+                        ),
+                        text: Text(
+                          'Provide',
                           style: TextStyle(
+                            color: controller.filters['Provide'].value
+                                ? kColorBlueText
+                                : Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
+                            fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          "Service Description",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          "Service Price: \$X",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ],
+                        onPressed: () {
+                          controller.filters['Provide'].value =
+                              controller.filters['Provide'].value
+                                  ? false
+                                  : true;
+                          controller.filteredServiceList();
+                        },
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Obx(
+                      () => RoundIconButton(
+                        color: controller.filters['Consume'].value
+                            ? Colors.white
+                            : Colors.blue,
+                        icon: Icon(
+                          Icons.filter_alt,
+                          color: controller.filters['Consume'].value
+                              ? kColorBlueText
+                              : Colors.white,
+                        ),
+                        text: Text(
+                          'Consume',
+                          style: TextStyle(
+                            color: controller.filters['Consume'].value
+                                ? kColorBlueText
+                                : Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        onPressed: () {
+                          controller.filters['Consume'].value =
+                              controller.filters['Consume'].value
+                                  ? false
+                                  : true;
+                          controller.filteredServiceList();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              StreamBuilder(
+                  stream: ServiceRepository.instance.getAllUserServices(
+                      UserController.instance.user.value.email),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator();
+                    }
+
+                    var serviceDocs = snapshot.data!.docs;
+                    controller.serviceList = [];
+                    for (var doc in serviceDocs) {
+                      controller.serviceList.add(ServiceModel.fromSnapshot(
+                          doc as DocumentSnapshot<Map<String, dynamic>>));
+                    }
+                    controller.serviceList = controller.serviceList
+                        .where((service) =>
+                            service.status == ServiceStatus.COMPLETED)
+                        .toList();
+                    controller.filteredList = controller.serviceList.obs;
+                    return Obx(
+                      () => Expanded(
+                        flex: 2,
+                        child: ListView.builder(
+                          itemCount: controller.filteredList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            ServiceModel service =
+                                controller.filteredList[index];
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 4,
+                              child: ListTile(
+                                title: Text(service.title),
+                                subtitle: Text(service.description),
+                                leading: Icon(
+                                  categoriesIcon[service.category],
+                                  size: 30,
+                                ),
+                                trailing: Icon(Icons.arrow_forward),
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ServiceDialog(
+                                        service: service,
+                                        isConsumer: false,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }),
             ],
           ),
         ),

@@ -248,11 +248,15 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                               convertStringToCategory(controller.category),
                           date: controller.date!,
                           sourceAddress: controller.sourceAddress!,
+                          sourceAddressDescription:
+                              controller.sourceAddressDescription.value,
                           destAddress: controller.destAddress!,
+                          destAddressDescription:
+                              controller.destAddressDescription.value,
                           description: controller.description!,
                           price: controller.price!,
                           status: ServiceStatus.PENDING);
-                      ServiceRepository.instace
+                      ServiceRepository.instance
                           .createService(controller.newService);
                       print(controller.newService);
                     }
