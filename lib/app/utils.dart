@@ -51,3 +51,15 @@ Future<String?> pickSingleFile() async {
   }
   return null;
 }
+
+TimeOfDay timestampToTimeOfDay(Timestamp timestamp) {
+  DateTime dateTime = timestamp.toDate();
+  return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+}
+
+Timestamp timeOfDayToTimestamp(TimeOfDay timeOfDay) {
+  DateTime now = DateTime.now();
+  DateTime dateTime =
+      DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+  return Timestamp.fromDate(dateTime);
+}

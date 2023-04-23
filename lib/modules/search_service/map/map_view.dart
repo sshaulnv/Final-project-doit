@@ -30,6 +30,7 @@ class SearchMapState extends State<SearchMap> {
 
     var tempPosition = LocationService.instance.getCurrentPosition();
     tempPosition.then((resp) {
+      print("###############${resp}");
       controller.currentPosition = LatLng(resp.latitude, resp.longitude);
       userCameraPosition = CameraPosition(
         target: controller.currentPosition,

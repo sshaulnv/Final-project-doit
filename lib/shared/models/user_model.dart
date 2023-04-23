@@ -7,6 +7,10 @@ class UserModel {
   String password;
   List<dynamic> provideServices;
   List<dynamic> consumeServices;
+  Map<String, dynamic> categoriesPreferences;
+  Map<String, dynamic> preferredHours;
+  Map<String, dynamic> preferredPrice;
+  int preferredDistance;
 
   UserModel({
     this.id,
@@ -15,6 +19,10 @@ class UserModel {
     required this.password,
     this.provideServices = const [],
     this.consumeServices = const [],
+    this.categoriesPreferences = const {},
+    this.preferredHours = const {},
+    this.preferredPrice = const {},
+    this.preferredDistance = 20,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,6 +32,10 @@ class UserModel {
       "password": password,
       "provideServices": provideServices,
       "consumeServices": consumeServices,
+      "categoriesPreferences": categoriesPreferences,
+      "preferredHours": preferredHours,
+      "preferredPrice": preferredPrice,
+      "preferredDistance": preferredDistance,
     };
   }
 
@@ -37,6 +49,10 @@ class UserModel {
       password: data["password"],
       provideServices: data["provideServices"],
       consumeServices: data["consumeServices"],
+      categoriesPreferences: data["categoriesPreferences"],
+      preferredHours: data["preferredHours"],
+      preferredPrice: data["preferredPrice"],
+      preferredDistance: data["preferredDistance"],
     );
   }
 }

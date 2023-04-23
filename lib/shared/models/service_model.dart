@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doit_app/app/utils.dart';
+import 'package:flutter/material.dart';
 
 import '../constants/categories.dart';
 import '../constants/service_status.dart';
@@ -10,6 +12,7 @@ class ServiceModel {
   final String title;
   final Categories category;
   final DateTime date;
+  final TimeOfDay hour;
   final GeoPoint sourceAddress;
   final String sourceAddressDescription;
   final GeoPoint destAddress;
@@ -25,6 +28,7 @@ class ServiceModel {
     required this.title,
     required this.category,
     required this.date,
+    required this.hour,
     required this.sourceAddress,
     required this.sourceAddressDescription,
     required this.destAddress,
@@ -41,6 +45,7 @@ class ServiceModel {
       "title": title,
       "category": category.toString().split('.')[1],
       "date": Timestamp.fromDate(date),
+      "hour": timeOfDayToTimestamp(hour),
       "sourceAddress": sourceAddress,
       "sourceAddressDescription": sourceAddressDescription,
       "destAddress": destAddress,
@@ -61,6 +66,7 @@ class ServiceModel {
       title: data["title"],
       category: convertStringToCategory(data["category"]),
       date: data["date"].toDate(),
+      hour: timestampToTimeOfDay(data["hour"]),
       sourceAddress: data["sourceAddress"],
       sourceAddressDescription: data["sourceAddressDescription"],
       destAddress: data["destAddress"],

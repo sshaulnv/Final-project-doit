@@ -155,6 +155,26 @@ class ServiceDialog extends StatelessWidget {
                   Row(
                     children: [
                       const Text(
+                        'Hour: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          '${service.hour.format(context)}',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      const Text(
                         'Price: ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

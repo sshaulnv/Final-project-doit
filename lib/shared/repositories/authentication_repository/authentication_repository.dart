@@ -28,21 +28,26 @@ class AuthenticationRepository extends GetxController {
     if (user == null) {
       Get.offAll(() => LoginScreen());
     } else {
+      print(UserController.instance.user.value.email);
       if (UserController.instance.user.value.email.isEmpty) {
         dynamic userData =
             await UserRepository.instace.getUserDetails(user.email!);
-
+        print(userData.preferredDistance);
         UserController.instance.user = UserModel(
-                username: userData.username,
-                email: userData.email,
-                password: userData.password)
-            .obs;
+          username: userData.username,
+          email: userData.email,
+          password: userData.password,
+          categoriesPreferences: userData.categoriesPreferences,
+          preferredHours: userData.preferredHours,
+          preferredPrice: userData.preferredPrice,
+          preferredDistance: userData.preferredDistance,
+        ).obs;
       }
       Get.offAll(() => HomeScreen());
     }
   }
 
-  Future<void> createUserWithEmailAndPassword(
+  Future<bool> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
@@ -54,10 +59,13 @@ class AuthenticationRepository extends GetxController {
       final ex = SignupWithEmailAndPasswordFailure.code(e.code);
       print('FIREBASE AUTH EXCEPTION - ${ex.message}');
       errorSnackbar('Signup Error!', ex.message);
+      return false;
     } catch (_) {
       const ex = SignupWithEmailAndPasswordFailure();
       print('EXCEPTION - ${ex.message}');
+      return false;
     }
+    return true;
   }
 
   Future<bool> loginWithEmailAndPassword(String email, String password) async {

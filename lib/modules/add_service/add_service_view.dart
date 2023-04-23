@@ -103,6 +103,46 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     controller.category = value!;
                   },
                 ),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () async {
+                    final TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: controller.time != null
+                          ? controller.time!
+                          : TimeOfDay.now(),
+                      builder: (BuildContext context, Widget? child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context)
+                              .copyWith(alwaysUse24HourFormat: true),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (pickedTime != null) {
+                      print(pickedTime);
+                      setState(() {
+                        controller.time = pickedTime;
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: kColorRoundButton,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  child: Text(
+                    controller.time == null
+                        ? 'Select Hour'
+                        : 'Hour: ${controller.time?.format(context).toString()}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () async {
@@ -212,6 +252,9 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     if (int.tryParse(value) == null) {
                       return 'Please enter a valid price';
                     }
+                    if (int.tryParse(value)! > kMaximumPrice) {
+                      return 'Maximum price is 300 NIS';
+                    }
                     return null;
                   },
                   onSaved: (String? value) {
@@ -240,6 +283,11 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                             'Fill all fields!', 'The Date field is empty');
                         return;
                       }
+                      if (controller.time == null) {
+                        errorSnackbar(
+                            'Fill all fields!', 'The Hour field is empty');
+                        return;
+                      }
                       controller.formKey.currentState!.save();
                       controller.newService = ServiceModel(
                           consumer: controller.consumer!,
@@ -247,6 +295,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                           category:
                               convertStringToCategory(controller.category),
                           date: controller.date!,
+                          hour: controller.time!,
                           sourceAddress: controller.sourceAddress!,
                           sourceAddressDescription:
                               controller.sourceAddressDescription.value,

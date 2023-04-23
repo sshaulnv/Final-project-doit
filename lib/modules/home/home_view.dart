@@ -3,17 +3,20 @@ import 'package:doit_app/modules/history/history_view.dart';
 import 'package:doit_app/modules/home/home_controller.dart';
 import 'package:doit_app/modules/profile/profile_view.dart';
 import 'package:doit_app/shared/constants/categories.dart';
+import 'package:doit_app/shared/controllers/user_controller.dart';
 import 'package:doit_app/shared/repositories/service_repository.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/constants/constants.dart';
 import 'package:get/get.dart';
+import '../../app/services/recommendation_service.dart';
 import '../../shared/constants/service_status.dart';
 import '../../shared/models/service_model.dart';
 import '../../shared/widgets/service_dialog.dart';
 import '../add_service/add_service_view.dart';
 import '../search_service/map/map_view.dart';
+import '../search_service/recommendations/recommendations_view.dart';
 
 class HomeScreen extends StatelessWidget {
   final controller = Get.put(HomeController());
@@ -126,6 +129,38 @@ class HomeScreen extends StatelessWidget {
                       ),
                       onPressed: () {
                         Get.to(() => SearchMap());
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    RoundIconButton(
+                      color: kColorRoundButton,
+                      icon: const Icon(
+                        Icons.person_pin_outlined,
+                        color: Colors.white,
+                      ),
+                      text: const Text(
+                        'Recommendations',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () async {
+                        // TODO: filter services
+                        List<ServiceModel> allServices =
+                            await ServiceRepository.instance.getAllServices();
+                        print(UserController.instance.user.value.username);
+                        List<ServiceModel> recommendedServices =
+                            await RecommendationService.instance.recommend(
+                                allServices,
+                                UserController.instance.user.value);
+
+                        Get.to(
+                          () => RecommendationsScreen(
+                            recommendedServices: recommendedServices,
+                          ),
+                        );
                       },
                     ),
                   ],

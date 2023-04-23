@@ -7,6 +7,7 @@ import '../../shared/controllers/user_controller.dart';
 import '../../shared/models/user_model.dart';
 import '../../shared/repositories/authentication_repository/authentication_repository.dart';
 import '../../shared/repositories/user_repository.dart';
+import '../services/recommendation_service.dart';
 
 class InitialBindings implements Bindings {
   @override
@@ -19,5 +20,6 @@ class InitialBindings implements Bindings {
     Get.put(StorageRepository(), permanent: true);
     Get.put(UserRepository(), permanent: true);
     Get.put(ServiceRepository(), permanent: true);
+    Get.put(RecommendationService(), permanent: true);
   }
 }

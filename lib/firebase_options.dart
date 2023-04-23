@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '356322095608',
     projectId: 'doit-a35c4',
     storageBucket: 'doit-a35c4.appspot.com',
-    iosClientId: '356322095608-fs6phnniavj9ncirnfo3d5420jitatua.apps.googleusercontent.com',
+    iosClientId:
+        '356322095608-fs6phnniavj9ncirnfo3d5420jitatua.apps.googleusercontent.com',
     iosBundleId: 'com.example.doitApp',
   );
 }

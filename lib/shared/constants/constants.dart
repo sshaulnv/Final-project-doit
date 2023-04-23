@@ -59,3 +59,5 @@ const kTextStyleTextFiled = TextStyle(
 );
 
 const kMapCameraZoom = 15.0;
+
+const kMaximumPrice = 300;

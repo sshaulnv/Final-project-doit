@@ -60,6 +60,13 @@ class ServiceRepository extends GetxController {
         .snapshots();
   }
 
+  Future<List<ServiceModel>> getAllServices() async {
+    final snapshots = await _db.collection("Services").get();
+    final services =
+        snapshots.docs.map((e) => ServiceModel.fromSnapshot(e)).toList();
+    return services;
+  }
+
   void updateServiceStatus(String id, ServiceStatus status) {
     _db
         .collection('Services')
