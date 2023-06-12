@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doit_app/shared/controllers/user_controller.dart';
-import 'package:doit_app/shared/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/theme.dart';
 import '../../shared/constants/categories.dart';
 import '../../shared/constants/constants.dart';
 import '../../shared/constants/service_status.dart';
@@ -28,9 +28,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(ServiceRepository.instance.consumeServiceStream);
     return Scaffold(
-      backgroundColor: Color(0x88171717),
+      backgroundColor: kWhiteBackgroundColor,
+      // bottomNavigationBar: BottomNavigator(screenIndex: 2),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -42,7 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: Center(
                   child: Text(
                     'History',
-                    style: kTextStyleWhiteHeader.copyWith(fontSize: 40),
+                    style: kTextStyleHeader.copyWith(fontSize: 40),
                   ),
                 ),
               ),
@@ -58,7 +58,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       color: Colors.white,
                       icon: const Icon(
                         Icons.filter_alt,
-                        color: kColorBlueText,
+                        color: kRoundButtonBackgroundColor,
                       ),
                       text: const Text(
                         'Categories',
@@ -85,18 +85,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       () => RoundIconButton(
                         color: controller.filters['Provide'].value
                             ? Colors.white
-                            : Colors.blue,
+                            : kRoundButtonBackgroundColor,
                         icon: Icon(
                           Icons.filter_alt,
                           color: controller.filters['Provide'].value
-                              ? kColorBlueText
+                              ? kRoundButtonBackgroundColor
                               : Colors.white,
                         ),
                         text: Text(
                           'Provide',
                           style: TextStyle(
                             color: controller.filters['Provide'].value
-                                ? kColorBlueText
+                                ? kRoundButtonBackgroundColor
                                 : Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -118,18 +118,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       () => RoundIconButton(
                         color: controller.filters['Consume'].value
                             ? Colors.white
-                            : Colors.blue,
+                            : kRoundButtonBackgroundColor,
                         icon: Icon(
                           Icons.filter_alt,
                           color: controller.filters['Consume'].value
-                              ? kColorBlueText
+                              ? kRoundButtonBackgroundColor
                               : Colors.white,
                         ),
                         text: Text(
                           'Consume',
                           style: TextStyle(
                             color: controller.filters['Consume'].value
-                                ? kColorBlueText
+                                ? kRoundButtonBackgroundColor
                                 : Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -170,6 +170,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             service.status == ServiceStatus.COMPLETED)
                         .toList();
                     controller.filteredList = controller.serviceList.obs;
+
                     return Obx(
                       () => Expanded(
                         flex: 2,

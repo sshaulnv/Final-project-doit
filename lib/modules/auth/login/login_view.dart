@@ -5,6 +5,7 @@ import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../app/theme.dart';
 import '../../../shared/constants/constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x88171717),
+      backgroundColor: kWhiteBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Form(
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const Text(
                 'Welcome!',
-                style: kTextStyleWhiteHeader,
+                style: kTextStyleHeader,
               ),
               SizedBox(height: 40),
               TextFormField(
@@ -69,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 30),
               RoundIconButton(
-                color: kColorRoundButton,
                 icon: const Icon(
                   Icons.login,
                   color: Colors.white,
@@ -94,24 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               SizedBox(height: 20),
-              RoundIconButton(
-                color: Colors.white,
-                icon: const ImageIcon(
-                  AssetImage('assets/images/google_icon.png'),
-                  size: 24,
-                  color: Color(0xFF1976D2),
-                ),
-                text: const Text(
-                  'Google',
-                  style: TextStyle(
-                    color: Color(0xFF1976D2),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-              SizedBox(height: 20),
               TextButton(
                 onPressed: () async {
                   Get.to(SignupScreen(), transition: Transition.native);
@@ -121,13 +103,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(color: Colors.blue[300]),
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Forgot password?',
-                  style: TextStyle(color: Colors.blue[300]),
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return ForgotPasswordDialog();
+              //       },
+              //     );
+              //   },
+              //   child: Text(
+              //     'Forgot password?',
+              //     style: TextStyle(color: Colors.blue[300]),
+              //   ),
+              // ),
             ],
           ),
         ),

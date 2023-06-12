@@ -3,6 +3,8 @@ import 'package:doit_app/shared/controllers/user_controller.dart';
 import 'package:doit_app/shared/models/user_model.dart';
 import 'package:get/get.dart';
 
+import '../../shared/models/service_model.dart';
+
 class HistoryController extends GetxController {
   static HistoryController get instance => Get.find();
   UserModel user = UserController.instance.user.value;
@@ -15,19 +17,23 @@ class HistoryController extends GetxController {
   };
 
   void filteredServiceList() {
+    user = UserController.instance.user.value;
     filteredList.value = serviceList;
     filters.forEach((filter, value) {
       switch (filter) {
         case 'Category':
-          print('LIST BEFORE FILTER: ${filters['Category'].toString()}');
           filteredList = filteredList
               .where((service) => value.contains(service.category))
               .toList()
               .obs;
-          print(filteredList.value);
+
           break;
         case 'Consume':
         case 'Provide':
+          for (ServiceModel service in filteredList.value) {
+            print(service.provider);
+            print(service.consumer);
+          }
           if (filters['Provide'].value && filters['Consume'].value) {
             filteredList = filteredList
                 .where((service) =>

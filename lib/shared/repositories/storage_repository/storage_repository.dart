@@ -1,19 +1,19 @@
 import 'dart:io';
 
+import 'package:doit_app/app/utils.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class StorageRepository extends GetxController {
   static StorageRepository get instance => Get.find();
-
   final FirebaseStorage storage = FirebaseStorage.instance;
-  Future<void> uploadFile(String filePath, String fileName) async {
-    File file = File(filePath);
+  Future<void> uploadFile(String refPath, File file) async {
     try {
-      await storage.ref('profile_photos/$fileName').putFile(file);
+      final reference = FirebaseStorage.instance.ref(refPath);
+      await reference.putFile(file);
     } on FirebaseException catch (e) {
-      //TODO: CHANGE TO SNACKBAR WITH MSG
+      errorSnackbar('Error', 'We have some problems with uploading');
       print(e);
     }
   }

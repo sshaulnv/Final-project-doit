@@ -1,24 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-// import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart' as lo;
 
 class LocationService extends GetxController {
   static LocationService get instance => Get.find();
-  final String key = '';
+  final String key = 'API_KEY_REPLACE';
+  final places = FlutterGooglePlacesSdk('API_KEY_REPLACE');
 
   Future<String> getPlaceId(String input) async {
     final String url =
         'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&key=$key';
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
-    print(json);
     if (json['status'] != 'ZERO_RESULTS') {
       var placeld = json['candidates'][0]['place_id'] as String;
-      print(placeld);
       return placeld;
     }
     return '';
@@ -34,7 +35,6 @@ class LocationService extends GetxController {
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
     var results = json['result'] as Map<String, dynamic>;
-    print(placeToAddressString(results));
     return results;
   }
 
@@ -44,6 +44,40 @@ class LocationService extends GetxController {
     final String streetNumber = place['address_components'][0]['short_name'];
     return '$city, $street, $streetNumber';
   }
+
+  Future<List<AutocompletePrediction>> autoCompleteSearch(String value) async {
+    final FindAutocompletePredictionsResponse response =
+        await places.findAutocompletePredictions(value);
+    return response.predictions;
+  }
+
+  // Future<void> getLocationPermission() async {
+  //   final location = lo.Location();
+  //   PermissionStatus permissionStatus = await Permission.location.status;
+  //
+  //   if (permissionStatus == PermissionStatus.denied) {
+  //     permissionStatus = await Permission.location.request();
+  //   }
+  //
+  //   if (permissionStatus == PermissionStatus.denied ||
+  //       permissionStatus == PermissionStatus.permanentlyDenied) {
+  //     await openAppSettings();
+  //   }
+  //
+  //   if (permissionStatus == PermissionStatus.granted) {
+  //     final serviceEnabled = await location.serviceEnabled();
+  //     if (!serviceEnabled) {
+  //       final enableService = await location.requestService();
+  //       if (!enableService) {
+  //         if (await location.requestService()) {
+  //           print('GOOD');
+  //         } else {
+  //           print('BAS');
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   Future<void> getLocationPermission() async {
     bool serviceEnabled;

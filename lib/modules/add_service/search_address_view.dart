@@ -32,9 +32,20 @@ class SearchAddressState extends State<SearchAddress> {
           Row(
             children: [
               Expanded(
-                  child: TextFormField(
-                controller: controller.searchController,
-              )),
+                child: TextFormField(
+                  controller: controller.searchController,
+                  onChanged: (value) {
+                    if (controller.debounce?.isActive ?? false)
+                      controller.debounce!.cancel();
+                    controller.debounce =
+                        Timer(const Duration(milliseconds: 1000), () {
+                      if (value.isNotEmpty) {
+                        LocationService.instance.autoCompleteSearch(value);
+                      }
+                    });
+                  },
+                ),
+              ),
               IconButton(
                 onPressed: () async {
                   if (controller.searchController.text.isNotEmpty) {

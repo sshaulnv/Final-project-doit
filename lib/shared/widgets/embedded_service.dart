@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:doit_app/shared/constants/categories.dart';
 import 'package:doit_app/shared/constants/constants.dart';
 
-import '../../app/utils.dart';
 import '../models/service_model.dart';
 import '../models/user_model.dart';
 
@@ -54,7 +53,7 @@ class EmbeddedVector {
             ? (user.preferredPrice['end'] / (kMaximumPrice / 10)).floor()
             : 29;
     for (int i = preferredPriceStartIndex; i <= preferredPriceEndIndex; i++) {
-      hoursVector[i] = 1.0;
+      priceVector[i] = 1.0;
     }
 
     List<double> generalVector = categoryVector + hoursVector + priceVector;
@@ -65,8 +64,6 @@ class EmbeddedVector {
       List<EmbeddedVector> vectors, int numberOfSimilar) {
     // Calculate the cosine similarity between vector_a and each vector in vectors
     final similarities = <double>[];
-    print(vector_a.generalVector);
-    print(vectors);
     for (final vector in vectors) {
       double dotProduct = 0;
       double normA = 0;
@@ -82,9 +79,11 @@ class EmbeddedVector {
       similarities.add(similarity);
     }
 
-    // Find the indexes of the 10 most similar vectors to vector_a
+    // Find the indexes of the 'numberOfSimilar' most similar vectors to vector_a
     final sortedIndexes = List<int>.generate(vectors.length, (i) => i)
       ..sort((a, b) => similarities[b].compareTo(similarities[a]));
+    numberOfSimilar =
+        numberOfSimilar < vectors.length ? numberOfSimilar : vectors.length;
     return sortedIndexes.sublist(0, numberOfSimilar);
   }
 }

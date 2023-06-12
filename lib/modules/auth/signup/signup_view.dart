@@ -6,6 +6,7 @@ import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../app/theme.dart';
 import '../../../shared/constants/constants.dart';
 
 const kRowButtonPadding = 3.0;
@@ -26,19 +27,29 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kColorBackground,
+      backgroundColor: kWhiteBackgroundColor,
       body: Container(
         // padding: EdgeInsets.symmetric(horizontal: 10),
         child: SafeArea(
           child: Form(
             key: controller.formKey,
             child: Stepper(
+              onStepContinue: () {
+                setState(() {
+                  controller.currentStep < 2 ? controller.currentStep++ : null;
+                });
+              },
+              onStepCancel: () {
+                setState(() {
+                  controller.currentStep > 0 ? controller.currentStep-- : null;
+                });
+              },
               steps: [
                 Step(
                   isActive: controller.currentStep == 0,
-                  title: const Text(
+                  title: Text(
                     'Personal Details',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: kTextStyleHeader.copyWith(fontSize: 20),
                   ),
                   content: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Center(
                           child: Text(
                             'Sign-up',
-                            style: kTextStyleWhiteHeader.copyWith(fontSize: 40),
+                            style: kTextStyleHeader.copyWith(fontSize: 40),
                           ),
                         ),
                       ),
@@ -169,15 +180,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 Step(
                   isActive: controller.currentStep == 1,
-                  title: const Text(
+                  title: Text(
                     'Self Preferences',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: kTextStyleHeader.copyWith(fontSize: 20),
                   ),
                   content: Column(
                     children: [
                       Text(
                         'Preferred Categories',
-                        style: kTitlePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(fontSize: 25),
                       ),
                       SizedBox(
                         height: 20,
@@ -231,20 +242,20 @@ class _SignupScreenState extends State<SignupScreen> {
                             .toList()[controller.currentCategoryIndex]
                             .floor()
                             .toString(),
-                        style: kValuePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(
+                            fontSize: 22, fontWeight: FontWeight.w100),
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Text(
                         'Preferred Hours',
-                        style: kTitlePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(fontSize: 25),
                       ),
                       RangeSlider(
                         values: controller.preferredHours,
                         min: 0,
                         max: 23,
-                        divisions: 24,
                         labels: RangeLabels(
                           controller.preferredHours.start.round().toString(),
                           controller.preferredHours.end.round().toString(),
@@ -262,14 +273,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Text(
                         '${controller.preferredHours.start.floor()}:00 - ${controller.preferredHours.end.floor()}:00',
-                        style: kValuePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(
+                            fontSize: 22, fontWeight: FontWeight.w100),
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Text(
                         'Preferred Prices',
-                        style: kTitlePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(fontSize: 25),
                       ),
                       RangeSlider(
                         values: controller.preferredPrice,
@@ -293,14 +305,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Text(
                         '${controller.preferredPrice.start.floor()} - ${controller.preferredPrice.end.floor()} ₪',
-                        style: kValuePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(
+                            fontSize: 22, fontWeight: FontWeight.w100),
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Text(
                         'Preferred Distance',
-                        style: kTitlePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(fontSize: 25),
                       ),
                       Slider(
                         value: controller.preferredDistance.toDouble(),
@@ -315,21 +328,22 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Text(
                         '${controller.preferredDistance} Km',
-                        style: kValuePreferrenceStyle,
+                        style: kTextStyleHeader.copyWith(
+                            fontSize: 22, fontWeight: FontWeight.w100),
                       ),
                     ],
                   ),
                 ),
                 Step(
                   isActive: controller.currentStep == 2,
-                  title: const Text(
+                  title: Text(
                     'Finish',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: kTextStyleHeader.copyWith(
+                        fontSize: 22, fontWeight: FontWeight.w100),
                   ),
                   content: Column(
                     children: [
                       RoundIconButton(
-                        color: kColorRoundButton,
                         icon: const Icon(
                           Icons.verified,
                           color: Colors.white,

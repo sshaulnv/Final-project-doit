@@ -1,13 +1,11 @@
-import 'package:doit_app/modules/history/history_controller.dart';
 import 'package:doit_app/shared/constants/categories.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:flutter/material.dart';
-import '../constants/constants.dart';
 import 'package:get/get.dart';
 
 class CategoryFilterDialog extends StatefulWidget {
   final List<Categories> options;
-  final HistoryController controller;
+  final controller;
   const CategoryFilterDialog(
       {Key? key, required this.options, required this.controller})
       : super(key: key);
@@ -56,7 +54,6 @@ class _CategoryFilterDialogState extends State<CategoryFilterDialog> {
             Align(
               alignment: Alignment.center,
               child: RoundIconButton(
-                color: kColorBlueText,
                 icon: const Icon(
                   Icons.verified,
                   color: Colors.white,

@@ -31,9 +31,9 @@ class RecommendationService extends GetxController {
       List<ServiceModel> services, UserModel user) {
     services = services
         .where((service) =>
-            service.consumer != user.email ||
-            service.provider != user.email ||
-            service.status != ServiceStatus.PENDING)
+            service.consumer != user.email &&
+            service.provider != user.email &&
+            service.status == ServiceStatus.PENDING)
         .toList();
     return services;
   }

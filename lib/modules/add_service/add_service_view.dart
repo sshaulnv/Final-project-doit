@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../app/theme.dart';
 import '../../app/utils.dart';
 import '../../shared/constants/constants.dart';
 import 'add_service_controller.dart';
@@ -22,17 +23,17 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
   final controller = Get.put(AddServiceController());
   @override
   void initState() {
-    super.initState();
     var tempPosition = LocationService.instance.getCurrentPosition();
     tempPosition.then((resp) {
       controller.currentPosition = LatLng(resp.latitude, resp.longitude);
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kColorBackground,
+      backgroundColor: kWhiteBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
@@ -46,7 +47,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                   child: Center(
                     child: Text(
                       'New Service',
-                      style: kTextStyleWhiteHeader.copyWith(fontSize: 40),
+                      style: kTextStyleHeader.copyWith(fontSize: 40),
                     ),
                   ),
                 ),
@@ -104,7 +105,8 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                ElevatedButton(
+                RoundIconButton(
+                  icon: Icon(Icons.timelapse),
                   onPressed: () async {
                     final TimeOfDay? pickedTime = await showTimePicker(
                       context: context,
@@ -120,20 +122,12 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                       },
                     );
                     if (pickedTime != null) {
-                      print(pickedTime);
                       setState(() {
                         controller.time = pickedTime;
                       });
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: kColorRoundButton,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  child: Text(
+                  text: Text(
                     controller.time == null
                         ? 'Select Hour'
                         : 'Hour: ${controller.time?.format(context).toString()}',
@@ -144,7 +138,8 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-                ElevatedButton(
+                RoundIconButton(
+                  icon: Icon(Icons.date_range),
                   onPressed: () async {
                     final DateTime? picked = await showDatePicker(
                       context: context,
@@ -158,14 +153,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                       });
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: kColorRoundButton,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  child: Text(
+                  text: Text(
                     controller.date == null
                         ? 'Select Date'
                         : 'Date: ${controller.date.toString().substring(0, 10)}',
@@ -178,7 +166,6 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                 const SizedBox(height: 16.0),
                 Obx(
                   () => RoundIconButton(
-                    color: kColorRoundButton,
                     icon: const Icon(
                       Icons.location_on,
                       color: Colors.white,
@@ -200,7 +187,6 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                 const SizedBox(height: 16.0),
                 Obx(
                   () => RoundIconButton(
-                    color: kColorRoundButton,
                     icon: Icon(
                       Icons.location_on,
                       color: Colors.white,
@@ -263,7 +249,6 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 RoundIconButton(
-                  color: kColorRoundButton,
                   icon: const Icon(
                     Icons.verified,
                     color: Colors.white,
@@ -307,7 +292,6 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                           status: ServiceStatus.PENDING);
                       ServiceRepository.instance
                           .createService(controller.newService);
-                      print(controller.newService);
                     }
                   },
                 ),

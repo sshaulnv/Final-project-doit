@@ -4,9 +4,10 @@ import 'package:doit_app/shared/repositories/user_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../shared/constants/categories.dart';
 import '../../../shared/models/user_model.dart';
+import '../../splash_screen/splash_screen.dart';
+import '../login/login_view.dart';
 
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();
@@ -39,9 +40,12 @@ class SignupController extends GetxController {
 
   Future<void> registerUser(UserModel user) async {
     await AuthenticationRepository.instance
-        .createUserWithEmailAndPassword(user.email, user.password)
+        .createUserWithEmailAndPassword(user)
         .then((value) => {
-              if (value == true) {UserRepository.instace.createUser(user)}
+              if (value == true)
+                {Get.offAll(() => SplashScreen())}
+              else
+                {Get.offAll(() => LoginScreen())}
             });
   }
 

@@ -1,107 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:doit_app/modules/history/history_view.dart';
 import 'package:doit_app/modules/home/home_controller.dart';
-import 'package:doit_app/modules/profile/profile_view.dart';
 import 'package:doit_app/shared/constants/categories.dart';
-import 'package:doit_app/shared/controllers/user_controller.dart';
 import 'package:doit_app/shared/repositories/service_repository.dart';
-import 'package:doit_app/shared/widgets/round_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:doit_app/shared/constants/constants.dart';
 import 'package:get/get.dart';
-import '../../app/services/recommendation_service.dart';
+import '../../app/theme.dart';
 import '../../shared/constants/service_status.dart';
 import '../../shared/models/service_model.dart';
 import '../../shared/widgets/service_dialog.dart';
+import '../../shared/widgets/squere_icon_button.dart';
 import '../add_service/add_service_view.dart';
+import '../providers/providers_view.dart';
 import '../search_service/map/map_view.dart';
 import '../search_service/recommendations/recommendations_view.dart';
+import '../suggest_service/suggest_service_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final controller = Get.put(HomeController());
 
-  HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kColorBackground,
+      backgroundColor: kWhiteBackgroundColor,
+      // bottomNavigationBar: BottomNavigator(screenIndex: 0),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              RoundIconButton(
-                color: kColorRoundButton,
-                icon: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                text: const Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                onPressed: () {
-                  Get.to(() => ProfileScreen());
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
               SingleChildScrollView(
+                padding: EdgeInsets.all(10),
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RoundIconButton(
-                      color: Colors.white,
+                    SquereIconButton(
                       icon: const Icon(
-                        Icons.home,
-                        color: kColorBlueText,
-                      ),
-                      text: const Text(
-                        'Home',
-                        style: TextStyle(
-                          color: kColorBlueText,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                      onPressed: () {},
-                    ),
-                    SizedBox(width: 20),
-                    RoundIconButton(
-                      color: kColorRoundButton,
-                      icon: const Icon(
-                        Icons.list_alt,
+                        Icons.request_page,
                         color: Colors.white,
+                        size: 40,
                       ),
                       text: const Text(
-                        'History',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.to(() => HistoryScreen());
-                      },
-                    ),
-                    SizedBox(width: 20),
-                    RoundIconButton(
-                      color: kColorRoundButton,
-                      icon: const Icon(
-                        Icons.work,
-                        color: Colors.white,
-                      ),
-                      text: const Text(
-                        'New Service',
+                        'Request Service',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -113,11 +63,30 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(width: 20),
-                    RoundIconButton(
-                      color: kColorRoundButton,
+                    SquereIconButton(
+                      icon: const Icon(
+                        Icons.work,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      text: const Text(
+                        'Suggest Service',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.to(() => SuggestServiceScreen());
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    SquereIconButton(
                       icon: const Icon(
                         Icons.map_outlined,
                         color: Colors.white,
+                        size: 40,
                       ),
                       text: const Text(
                         'Search Map',
@@ -132,11 +101,11 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(width: 20),
-                    RoundIconButton(
-                      color: kColorRoundButton,
+                    SquereIconButton(
                       icon: const Icon(
-                        Icons.person_pin_outlined,
+                        Icons.recommend,
                         color: Colors.white,
+                        size: 40,
                       ),
                       text: const Text(
                         'Recommendations',
@@ -147,19 +116,29 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        // TODO: filter services
-                        List<ServiceModel> allServices =
-                            await ServiceRepository.instance.getAllServices();
-                        print(UserController.instance.user.value.username);
-                        List<ServiceModel> recommendedServices =
-                            await RecommendationService.instance.recommend(
-                                allServices,
-                                UserController.instance.user.value);
-
                         Get.to(
-                          () => RecommendationsScreen(
-                            recommendedServices: recommendedServices,
-                          ),
+                          () => RecommendationsScreen(),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    SquereIconButton(
+                      icon: const Icon(
+                        Icons.handshake,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      text: const Text(
+                        'Providers',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () async {
+                        Get.to(
+                          () => ProvidersScreen(),
                         );
                       },
                     ),
@@ -167,12 +146,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Services You Provide:',
-                style: kTextStyleWhiteHeader.copyWith(
-                    fontSize: 25,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.w900),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Services You Provide',
+                  style: kTextStyleHeader.copyWith(fontSize: 30),
+                ),
               ),
               SizedBox(height: 10),
               StreamBuilder<QuerySnapshot>(
@@ -233,12 +212,12 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 20),
-              Text(
-                'Services You Consume:',
-                style: kTextStyleWhiteHeader.copyWith(
-                    fontSize: 25,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.w900),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Services You Consume',
+                  style: kTextStyleHeader.copyWith(fontSize: 30),
+                ),
               ),
               SizedBox(height: 10),
               StreamBuilder<QuerySnapshot>(

@@ -1,12 +1,9 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:doit_app/shared/constants/categories.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void errorSnackbar(String title, String message) {
   Get.snackbar(
@@ -38,18 +35,6 @@ double calculateDistance(GeoPoint point1, GeoPoint point2) {
       cos((lat2 - lat1) * p) / 2 +
       cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
   return 12742 * asin(sqrt(a));
-}
-
-Future<String?> pickSingleFile() async {
-  if (await Permission.storage.request().isGranted) {
-    final results = await FilePicker.platform.pickFiles();
-
-    if (results == null) {
-      errorSnackbar('Error', 'Please pick a file');
-    }
-    return results?.files.single.path;
-  }
-  return null;
 }
 
 TimeOfDay timestampToTimeOfDay(Timestamp timestamp) {

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const kColorBlueText = Color(0xFF42A5F5);
+import '../../app/theme.dart';
+
+const kColorBlueText = Color(0xFF005691);
 const kColorBackground = Color(0x88171717);
 const kColorRoundButton = Color(0xFF1976D2);
 
@@ -10,13 +12,13 @@ const kTextFieldInputDecoration = InputDecoration(
   enabledBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(12.0)),
     borderSide: BorderSide(
-      color: Color(0xFF42A5F5),
+      color: kColorBlueText,
     ),
   ),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(12.0)),
     borderSide: BorderSide(
-      color: Color(0xFF42A5F5),
+      color: kColorBlueText,
       width: 2,
     ),
   ),
@@ -36,19 +38,18 @@ const kTextFieldInputDecoration = InputDecoration(
   ),
   errorStyle: TextStyle(color: Colors.redAccent),
   labelStyle: TextStyle(
-    color: Color(0xFF42A5F5),
+    color: kColorBlueText,
   ),
   hintText: '',
   hintStyle: TextStyle(
-    color: Color(0xFF42A5F5),
+    color: kColorBlueText,
   ),
 );
-const kTextStyleWhiteHeader = TextStyle(
+const kTextStyleHeader = TextStyle(
   fontSize: 32,
-  fontWeight: FontWeight.bold,
-  color: Color(0XFFECF9FF),
-  fontFamily: 'Outfit',
-  letterSpacing: 7,
+  color: kBottomNavigatorTextBackgroundColor,
+  fontFamily: 'LilitaOne',
+  letterSpacing: 1,
 );
 const kTextStyleTextFiled = TextStyle(
   color: kColorBlueText,

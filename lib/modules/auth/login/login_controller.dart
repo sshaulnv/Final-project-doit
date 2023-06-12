@@ -15,12 +15,10 @@ class LoginController extends GetxController {
   Future<void> loginUser(String email, String password) async {
     if (await AuthenticationRepository.instance
         .loginWithEmailAndPassword(email, password)) {
-      dynamic userData = (await UserRepository.instace.getUserDetails(email));
-      UserController.instance.user = UserModel(
-              username: userData.username,
-              email: userData.email,
-              password: userData.password)
-          .obs;
+      UserModel userData =
+          (await UserRepository.instance.getUserDetails(email));
+      UserController.instance.user = userData.obs;
     }
+    print('######## ${UserController.instance.user.value.email}');
   }
 }
